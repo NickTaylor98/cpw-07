@@ -29,10 +29,11 @@ const handlers = {
     '/form.html' : html.getFormHtml,
     '/app.js' : js.getAppJS,
     '/form.js' : js.getFormJS,
-    '/site.css' : css.getSiteCSS
+    '/site.css' : css.getSiteCSS,
+    '/jquery.min.js' : js.getJquery
 };
 const JSONFile = 'articles.json';
-let articles = require('./' + JSONFile);
+let articles = require(`./${JSONFile}`);
 
 const server = http.createServer((req, res) => {
     parseBodyJson(req, (err, payload) => {

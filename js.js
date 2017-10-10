@@ -24,5 +24,17 @@ module.exports.getFormJS = (req, res, payload, cb) => {
             console.log(data);
             cb(null, data, 'application/javascript');
         }
-    })
+    })    
+}
+
+module.exports.getJquery = (req, res, payload, cb) => {
+    log.log(file, '/', payload);
+    fs.readFile('./public/jquery.min.js', (err, data) => {
+        if (err) console.error(err);
+        else 
+        {
+            console.log(data);
+            cb(null, data, 'application/javascript');
+        }
+    })    
 }
