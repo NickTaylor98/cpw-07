@@ -14,22 +14,26 @@
     <br />
     <input type="text" id="Text">Text</input>
     <br />
-    <input type="button" onclick="createNewArticle()" title="Add new article"></input>
+    <input type="button" onclick="createNewArticle()">Add new article</input>
 </body>
 <script>
-function createNewArticle()
-{
-    let auth = document.getElementById('Author').value;
-    let titl = document.getElementById('Title').value;
-    let txt = document.getElementById('Text').value;
-    const date = new Date();
-    let dat = '' + (date.getUTCDate()+1) + '-' + (date.getUTCMonth()+1) + '-' + date.getUTCFullYear();
-    let obj = JSON.stringify({author : auth, title : titl, text : txt, date : dat});
-    console.log(obj);
-    $.post("/api/articles/create", obj, (data) =>{
-        alert('Create successful');
-    });   
-}
+    function createNewArticle() {
+        let auth = document.getElementById('Author').value;
+        let titl = document.getElementById('Title').value;
+        let txt = document.getElementById('Text').value;
+        const date = new Date();
+        let dat = '' + validDate(date.getUTCDate() + 1) + '-' + validDate(date.getUTCMonth() + 1) + '-' + date.getUTCFullYear();
+        let obj = JSON.stringify({ author: auth, title: titl, text: txt, date: dat });
+        console.log(obj);
+        $.post("/api/articles/create", obj, (data) => {
+            alert('Create successful');
+        });
+    }
+    function validDate(param) {
+        if (param < 10)
+            return '0' + param;
+        else return param;
+    }
 </script>
 
 </html>
