@@ -14,7 +14,7 @@
     <br />
     <input type="text" id="Text">Text</input>
     <br />
-    <input type="button" onclick="createNewArticle()">Add new article</input>
+    <input type="button" onclick="createNewArticle()" value='Add new article'></input>
 </body>
 <script>
     function createNewArticle() {
@@ -22,7 +22,7 @@
         let titl = document.getElementById('Title').value;
         let txt = document.getElementById('Text').value;
         const date = new Date();
-        let dat = '' + validDate(date.getUTCDate() + 1) + '-' + validDate(date.getUTCMonth() + 1) + '-' + date.getUTCFullYear();
+        let dat = '' + validDate(date.getDate()) + '-' + validDate(date.getMonth() + 1) + '-' + date.getFullYear();
         let obj = JSON.stringify({ author: auth, title: titl, text: txt, date: dat });
         console.log(obj);
         $.post("/api/articles/create", obj, (data) => {

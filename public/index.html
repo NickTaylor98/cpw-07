@@ -3,6 +3,7 @@
 <head>
     <title>All Articles</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="site.css">
     <script src="jquery.min.js"></script>
 </head>
 
@@ -13,30 +14,44 @@
     <br />
     <input type="radio" id='rad2' name='rad' value='2'>Обратный</input>
     <br />
-    <input type="submit" value='Click me' id='1' onclick="getelements(this.id)"></input>
+    <input type="submit" value="Click me" onclick="getelements(1)"></input>
     <br />
     <a href="form.html">Создать статью</a>
 </body>
 <script>
+    let check = undefined;
     function getelements(i) {
-        let str = `{\"sortOrder\":\"desc\",\"limit\":5, \"page\":${i} }`;
-        if (document.getElementById("rad1").checked == true)
-            str = `{\"sortOrder\":\"asc\",\"limit\":5, \"page\":${i}}`;
-        document.body.innerHTML = '';
-        document.write('<input type="radio" id=\'rad1\' name=\'rad\' value="1" checked>Прямой</input><br /><input type="radio" id=\'rad2\' name=\'rad\' value=\'2\'>Обратный</input><br />');
+        let str = `{"sortOrder":"desc","limit":5, "page":${i} }`;
+        if (!check) {
+            if (document.getElementById("rad1").checked == true) {
+                str = `{"sortOrder":"asc","limit":5, "page":${i}}`;
+                check = 'asc';
+            }
+            else check = 'desc';
+        }
+        else {
+            switch (check)
+            {
+                case 'asc' : str = `{"sortOrder":"asc","limit":5, "page":${i} }`;
+                case 'desc' : str = `{"sortOrder":"desc","limit":5, "page":${i} }`; 
+            }
+        }
+        let doc = document.getElementsByTagName('body')[0];
+        doc.innerHTML = '';
         $.post('/api/articles/readall', str, (data) => {
             data.items.forEach((element) => {
-                document.write('<center><div class=\'article\'>');
-                document.write('<div class=\'date\'>' + element.date + '</div>');
-                document.write('<div class=\'title\'>' + element.title + '</div>');
-                document.write('<div class=\'text\'>' + element.text + '</div>');
-                document.write('<div class=\'author\'>' + element.author + '</div>');
-                document.write('</div></center><br />');
+                doc.innerHTML += (`<div id='article'>` +
+                    `<div class='date'>   ${element.date}  </div>` +
+                    `<div class='title'>  ${element.title} </div>` +
+                    `<div class='text'>'  ${element.text}  </div>` +
+                    `<div class='author'>'${element.author} </div>` +
+                    `</div><br />`);
             }, this);
             let numb = parseInt(data.meta.pages);
             for (let i = 1; i <= numb; ++i) {
-                document.write('<input type= \"button\" onclick=\'getelements(this.id)\' id=\'' + i + '\'">' + i + '</input>');
+                doc.innerHTML += (`<input type="button" onclick='getelements(${i})' value='${i}'"></input>`);
             }
+            console.log(doc.innerHTML);
         });
     }
 </script>
